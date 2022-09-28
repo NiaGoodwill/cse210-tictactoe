@@ -11,6 +11,11 @@
             DisplayBoard(board);
 
             int choice = GetMoveChoice(currentPlayer);
+            while (!IsSpaceFree(board, choice))
+            {
+            Console.WriteLine ("Please select an available space");
+            choice = GetMoveChoice(currentPlayer);
+            }
             MakeMove(board, choice, currentPlayer);
 
             currentPlayer = GetNextPlayer(currentPlayer);
@@ -54,6 +59,10 @@
     /// <returns>True if the game is over</returns>
     static bool IsGameOver(List<string> board)
     {
+        if (IsWinner(board, "x")|| IsWinner(board, "o")||IsTie(board))
+        {
+            return true;
+        }
         return false;
     }
 
@@ -63,7 +72,42 @@
     /// <returns></returns>
     static bool IsWinner(List<string> board, string player)
     {
-        return false;
+        if (board[0]==board[1] && board[1]==board[2])
+        {
+            return true;
+        }        
+        else if (board[3]==board[4] && board[4]==board[5])
+        {
+            return true;
+        }
+        else if (board[6]==board[7] && board[7]==board[8])
+        {
+            return true;
+        }
+        else if (board[0]==board[3] && board[3]==board[6])
+        {
+            return true;
+        }
+        else if (board[1]==board[4] && board[4]==board[7])
+        {
+            return true;
+        }
+        else if (board[2]==board[5] && board[5]==board[8])
+        {
+            return true;
+        }
+        else if (board[0]==board[4] && board[4]==board[8])
+        {
+            return true;
+        }
+        else if (board[2]==board[4] && board[4]==board[6])
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /// <summary>Determines if the board is full with no more moves possible.</summary>
@@ -71,7 +115,15 @@
     /// <returns>True if the board is full.</returns>
     static bool IsTie(List<string> board)
     {
-        return false;
+        bool tie = true;
+        foreach (string number in board)
+        {
+            if (number != "x" && number != "o")
+            {
+                tie = false;
+            }
+        }
+        return tie;
     }
 
     /// <summary>Cycles through the players (from x to o and o to x)</summary>
@@ -79,7 +131,14 @@
     /// <returns>The next players sign (x or o)</returns>
     static string GetNextPlayer(string currentPlayer)
     {
+        if (currentPlayer == "x")
+        {
+            return "o";
+        }
+        else
+        {
         return "x";
+        }
     }
 
     /// <summary>Gets the 1-based spot number associated with the user's choice.</summary>
@@ -87,7 +146,10 @@
     /// <returns>A 1-based spot number (not a 0-based index)</returns>
     static int GetMoveChoice(string currentPlayer)
     {
-        return 1;
+        Console.Write ("Where would you like to place? ");
+        int number = Convert.ToInt32(Console.ReadLine ());
+        
+        return number;
     }
 
     /// <summary>
@@ -99,6 +161,21 @@
     /// <param name="currentPlayer">The current player's sign (x or o)</param>
     static void MakeMove(List<string> board, int choice, string currentPlayer)
     {
+        if (IsSpaceFree (board, choice))
+        {
+            board[choice-1] = currentPlayer;
+        }
+    }
 
+    static bool IsSpaceFree(List<string> board, int choice)
+    {
+        if (board[choice-1] == Convert.ToString(choice))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
